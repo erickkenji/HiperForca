@@ -83,13 +83,8 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
 
     override fun onResults(results: Bundle) {
         Log.i(LOG_TAG, "onResults")
-        val matches = results
-                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-        var text = ""
-        for (result in matches!!)
-            text += result + "\n"
-
-        listener.onSpeechRecognized(text)
+        val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+        listener.onSpeechRecognized(matches[0])
     }
 
     override fun onRmsChanged(rmsdB: Float) {

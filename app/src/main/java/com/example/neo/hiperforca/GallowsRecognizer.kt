@@ -6,7 +6,7 @@ import com.example.neo.hiperforca.core.SpeechRecognizerService
 /**
  * Created by isabella on 17/11/17.
  */
-class GallowsRecognizer(context: Context, val listener: GallowsRecognizer.Listener) : SpeechRecognizerService.Listener {
+class GallowsRecognizer(val context: Context, val listener: GallowsRecognizer.Listener) : SpeechRecognizerService.Listener {
     private var speechRecognizerService: SpeechRecognizerService? = null
 
     interface Listener {
@@ -20,7 +20,12 @@ class GallowsRecognizer(context: Context, val listener: GallowsRecognizer.Listen
     }
 
     override fun onSpeechRecognized(text: String) {
-        listener.onSpeechRecognized(text)
+        // TODO - param for understanding when to recognize letters or the beginning of the game
+        if (true) {
+            recognizeLetters(text)
+        } else {
+            recognizeBeginningOfGame(text)
+        }
     }
 
     override fun onError(text: String) {
@@ -38,5 +43,31 @@ class GallowsRecognizer(context: Context, val listener: GallowsRecognizer.Listen
     fun destroy() {
         speechRecognizerService?.destroy()
         speechRecognizerService = null
+    }
+
+    private fun recognizeLetters(text: String) {
+        val splittedText = text.split(" ")
+        if (splittedText[0] != "letra" && splittedText[0] != "letter" && splittedText.size == 1) {
+            listener.onError("Entrada inválida! Tente novamente")
+            return
+        }
+
+        val letter = splittedText[1].toLowerCase()
+        val letters = context.resources.getStringArray(R.array.letters)
+        if (letters.contains(letter)) {
+            listener.onSpeechRecognized(letter)
+            return
+        }
+        listener.onError("Entrada inválida! Tente novamente")
+    }
+
+    private fun recognizeBeginningOfGame(text: String) {
+        val splittedText = text.split(" ")
+        if (splittedText[0] != "começar" && splittedText[0] != "begin") {
+            listener.onError("Entrada inválida! Tente novamente")
+            return
+        } else {
+            listener.onSpeechRecognized(splittedText[0])
+        }
     }
 }
