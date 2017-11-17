@@ -6,29 +6,28 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.ImageButton
 import android.widget.TextView
-import com.example.neo.hiperforca.core.SpeechRecognizerService
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
 
-class MainActivity : Activity(), SpeechRecognizerService.Listener {
+class MainActivity : Activity(), GallowsRecognizer.Listener {
     // https://www.androidhive.info/2014/07/android-speech-to-text-tutorial/
     private var speechInputText: TextView? = null
     private var speechButton: ImageButton? = null
-    private var speechRecognizerService: SpeechRecognizerService? = null
+    private var gallowsRecognizer: GallowsRecognizer? = null
     private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        speechRecognizerService = SpeechRecognizerService(this, this)
+        gallowsRecognizer = GallowsRecognizer(this, this)
         speechInputText = activity_main_text
         speechButton = activity_main_speak_button
 
         // hide the action bar
         actionBar?.hide()
-        speechButton?.setOnClickListener { speechRecognizerService?.listen() }
+        speechButton?.setOnClickListener { gallowsRecognizer?.listen() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -39,11 +38,15 @@ class MainActivity : Activity(), SpeechRecognizerService.Listener {
 
     override fun onDestroy() {
         super.onDestroy()
-        speechRecognizerService?.destroy()
-        speechRecognizerService = null
+        gallowsRecognizer?.destroy()
+        gallowsRecognizer = null
     }
 
-    override fun onTextChanged(text: String) {
+    override fun onSpeechRecognized(text: String) {
+        speechInputText?.text = text
+    }
+
+    override fun onError(text: String) {
         speechInputText?.text = text
     }
 
@@ -59,7 +62,7 @@ class MainActivity : Activity(), SpeechRecognizerService.Listener {
             MY_PERMISSIONS_REQUEST_RECORD_AUDIO -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    speechRecognizerService?.listen()
+                    gallowsRecognizer?.listen()
                 } else {
                     speechInputText?.text = "Sem permissão!"
                 }

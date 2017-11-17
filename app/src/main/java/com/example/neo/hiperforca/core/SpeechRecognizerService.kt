@@ -21,7 +21,8 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
     private val LOG_TAG = "VoiceRecognition"
 
     interface Listener {
-        fun onTextChanged(text: String)
+        fun onSpeechRecognized(text: String)
+        fun onError(text: String)
         fun onPermissionNeeded()
     }
 
@@ -65,7 +66,7 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
     override fun onError(errorCode: Int) {
         val errorMessage = getErrorText(errorCode)
         Log.d(LOG_TAG, "FAILED " + errorMessage)
-        listener.onTextChanged(errorMessage)
+        listener.onError(errorMessage)
     }
 
     override fun onEvent(arg0: Int, arg1: Bundle) {
@@ -88,7 +89,7 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
         for (result in matches!!)
             text += result + "\n"
 
-        listener.onTextChanged(text)
+        listener.onSpeechRecognized(text)
     }
 
     override fun onRmsChanged(rmsdB: Float) {
