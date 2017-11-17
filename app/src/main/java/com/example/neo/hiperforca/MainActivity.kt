@@ -8,12 +8,16 @@ import android.widget.ImageButton
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.pm.PackageManager
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
+import android.view.View
+import android.widget.RelativeLayout
 
 class MainActivity : Activity(), GallowsRecognizer.Listener {
     // https://www.androidhive.info/2014/07/android-speech-to-text-tutorial/
     private var speechInputText: TextView? = null
     private var speechButton: ImageButton? = null
+    private var activityContainer: RelativeLayout? = null
     private var gallowsRecognizer: GallowsRecognizer? = null
     private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 100
 
@@ -24,6 +28,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener {
         gallowsRecognizer = GallowsRecognizer(this, this)
         speechInputText = activity_main_text
         speechButton = activity_main_speak_button
+        activityContainer = activity_main_container
 
         // hide the action bar
         actionBar?.hide()
@@ -47,7 +52,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener {
     }
 
     override fun onError(text: String) {
-        speechInputText?.text = text
+        Snackbar.make(activityContainer as View, text, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onPermissionNeeded() {
