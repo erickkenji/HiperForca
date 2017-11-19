@@ -111,6 +111,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     // region controller
     override fun onWordDefined(partialWord: String) {
         gallowsWord?.text = partialWord
+        gallowsWrongLetters?.text = ""
         gallowsImage?.setImageResource(R.drawable.ico_gallow)
         gallowsGuide?.text = resources.getString(R.string.say_letter)
     }
@@ -144,10 +145,11 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
     }
 
-    override fun onGameLose(word: String) {
+    override fun onGameLose(word: String, wrongLetters: MutableList<Char>) {
         gallowsRecognizer?.shouldRecognizeLetters = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
+        gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
         gallowsImage?.setImageResource(R.drawable.ico_gallow_body)
     }
     // endregion

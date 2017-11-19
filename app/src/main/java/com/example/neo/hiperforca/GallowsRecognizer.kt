@@ -6,7 +6,7 @@ import com.example.neo.hiperforca.core.SpeechRecognizerService
 /**
  * Created by isabella on 17/11/17.
  */
-class GallowsRecognizer(val context: Context, val listener: GallowsRecognizer.Listener) : SpeechRecognizerService.Listener {
+class GallowsRecognizer(private val context: Context, private val listener: GallowsRecognizer.Listener) : SpeechRecognizerService.Listener {
     var shouldRecognizeLetters: Boolean = false
     private var speechRecognizerService: SpeechRecognizerService? = null
 
