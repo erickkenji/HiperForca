@@ -19,6 +19,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     private var gallowsWord: TextView? = null
     private var speechStatus: TextView? = null
     private var gallowsGuide: TextView? = null
+    private var gallowsWrongLetters: TextView? = null
     private var speechButton: ImageView? = null
     private var gallowsImage: ImageView? = null
     private var activityContainer: RelativeLayout? = null
@@ -34,6 +35,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsRecognizer = GallowsRecognizer(this, this)
         gallowsController = GallowsController(this, this)
         gallowsWord = activity_main_gallows_word
+        gallowsWrongLetters = activity_main_gallows_wrong_letters
         gallowsWord?.letterSpacing = 0.3f
         speechStatus = activity_main_speech_status_text
         gallowsGuide = activity_main_gallows_guide
@@ -127,7 +129,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
                         else -> R.drawable.ico_gallow_head
                     }
         gallowsImage?.setImageResource(resId)
-        // TODO - show list of wrong letters
+        gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
     }
 
     override fun onAlreadyMentionedLetter(letter: Char) {
@@ -139,7 +141,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsRecognizer?.shouldRecognizeLetters = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
-        // TODO - reproduce audio
+        gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
     }
 
     override fun onGameLose(word: String) {
@@ -149,4 +151,12 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsImage?.setImageResource(R.drawable.ico_gallow_body)
     }
     // endregion
+
+    //region private
+    private fun formatWrongLetter(wrongLetters: MutableList<Char>): String {
+        var formattedLetters = ""
+        wrongLetters.forEach { char -> formattedLetters += if (formattedLetters.isBlank()) char else ", " + char }
+        return formattedLetters
+    }
+    //endregion
 }
