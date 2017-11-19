@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.view.View
+import android.widget.ImageView
 import android.widget.RelativeLayout
 
 class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.Listener {
@@ -19,7 +20,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     private var speechStatus: TextView? = null
     private var gallowsDebug: TextView? = null
     private var gallowsGuide: TextView? = null
-    private var speechButton: ImageButton? = null
+    private var speechButton: ImageView? = null
     private var activityContainer: RelativeLayout? = null
     private var gallowsRecognizer: GallowsRecognizer? = null
     private var gallowsController: GallowsController? = null

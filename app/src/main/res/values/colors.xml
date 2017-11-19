@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#0d8960</color>
     <color name="colorAccent">#52dbdf</color>
     <color name="white">#ffffff</color>
-    <color name="bg_gradient_start">#11fbae</color>
-    <color name="bg_gradient_end">#15b8d0</color>
+    <color name="purple">#ffc2ff</color>
+    <color name="bg_gradient_start">#00b479</color>
+    <color name="bg_gradient_end">#00a0b7</color>
 </resources>

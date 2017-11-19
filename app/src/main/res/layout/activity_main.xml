@@ -1,3 +1,4 @@
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main_container"
@@ -10,81 +11,76 @@
         android:id="@+id/activity_main_gallows_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
         android:textColor="@color/white"
-        android:textSize="26sp"
-        android:textStyle="normal" />
+        android:layout_centerHorizontal="true"
+        android:textSize="35sp"
+        android:layout_marginTop="20dp"
+        android:text="p o p o p o"
+        android:textStyle="bold" />
 
-
-    <LinearLayout
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="400dp"
-        android:gravity="center"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ico_gallow" />
-    </LinearLayout>
+        android:scaleType="fitXY"
+        android:src="@drawable/ico_gallow" />
+
+    <ImageView
+        android:layout_width="1200dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/ico_grass" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
         android:gravity="center"
         android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/activity_main_gallows_debug"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white"
-            android:textSize="21sp"
-            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/activity_main_gallows_guide"
             android:text="@string/say_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="21sp"
-            android:textStyle="normal" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
+            android:text="p o p o p o"
             android:id="@+id/activity_main_speech_status_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:textColor="@color/white"
-            android:textSize="21sp"
-            android:layout_marginTop="10dp"
+            android:textSize="16sp"
             android:textStyle="normal" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/activity_main_speak_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorPrimary"
+            android:padding="10dp"
             android:src="@drawable/ico_mic" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
             android:text="@string/tap_on_mic"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            android:textStyle="normal" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
 </RelativeLayout>
