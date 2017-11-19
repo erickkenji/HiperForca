@@ -15,6 +15,9 @@ class GallowsRecognizer(val context: Context, val listener: GallowsRecognizer.Li
         fun onBeginRecognized()
         fun onError(text: String)
         fun onPermissionNeeded()
+        fun onBeginningOfSpeech()
+        fun onEndOfSpeech()
+        fun onReadyForSpeech()
     }
 
     init {
@@ -38,6 +41,18 @@ class GallowsRecognizer(val context: Context, val listener: GallowsRecognizer.Li
         listener.onPermissionNeeded()
     }
 
+    override fun onBeginningOfSpeech() {
+        listener.onBeginningOfSpeech()
+    }
+
+    override fun onEndOfSpeech() {
+        listener.onEndOfSpeech()
+    }
+
+    override fun onReadyForSpeech() {
+        listener.onReadyForSpeech()
+    }
+
     fun listen() {
         speechRecognizerService?.listen()
     }
@@ -49,7 +64,8 @@ class GallowsRecognizer(val context: Context, val listener: GallowsRecognizer.Li
 
     private fun recognizeLetters(text: String) {
         val splittedText = text.split(" ")
-        if (splittedText[0] != "letra" && splittedText[0] != "letter" && splittedText.size == 1) {
+        val firstWord = splittedText[0].toLowerCase()
+        if ((firstWord != "letra" && firstWord != "letter") || splittedText.size == 1) {
             sendInvalidSpeechError()
             return
         }
@@ -64,7 +80,9 @@ class GallowsRecognizer(val context: Context, val listener: GallowsRecognizer.Li
 
     private fun recognizeBeginningOfGame(text: String) {
         val splittedText = text.split(" ")
-        if (splittedText[0] != "começar" && splittedText[0] != "begin") {
+        val firstWord = splittedText[0].toLowerCase()
+
+        if (firstWord != "começar" && firstWord != "begin") {
             sendInvalidSpeechError()
         } else {
             shouldRecognizeLetters = true

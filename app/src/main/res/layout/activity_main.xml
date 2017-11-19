@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/activity_main_text"
+        android:id="@+id/activity_main_gallows_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -17,6 +17,7 @@
         android:textSize="26sp"
         android:textStyle="normal" />
 
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,6 +26,24 @@
         android:layout_marginBottom="60dp"
         android:gravity="center"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/activity_main_gallows_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="21sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/activity_main_speech_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/white"
+            android:textSize="21sp"
+            android:textStyle="normal" />
 
         <ImageButton
             android:id="@+id/activity_main_speak_button"
@@ -39,7 +58,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/tap_on_mic"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="normal" />
     </LinearLayout>
 

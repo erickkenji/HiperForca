@@ -24,6 +24,9 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
         fun onSpeechRecognized(text: String)
         fun onError(text: String)
         fun onPermissionNeeded()
+        fun onBeginningOfSpeech()
+        fun onEndOfSpeech()
+        fun onReadyForSpeech()
     }
 
     init {
@@ -32,7 +35,7 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
         recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         recognizerIntent?.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         recognizerIntent?.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "pt")
-        recognizerIntent?.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        recognizerIntent?.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale("pt", "BR"))
         recognizerIntent?.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
     }
 
@@ -53,6 +56,7 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
 
     override fun onBeginningOfSpeech() {
         Log.i(LOG_TAG, "onBeginningOfSpeech")
+        listener.onBeginningOfSpeech()
     }
 
     override fun onBufferReceived(buffer: ByteArray) {
@@ -61,6 +65,7 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
 
     override fun onEndOfSpeech() {
         Log.i(LOG_TAG, "onEndOfSpeech")
+        listener.onEndOfSpeech()
     }
 
     override fun onError(errorCode: Int) {
@@ -79,6 +84,7 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
 
     override fun onReadyForSpeech(arg0: Bundle) {
         Log.i(LOG_TAG, "onReadyForSpeech")
+        listener.onReadyForSpeech()
     }
 
     override fun onResults(results: Bundle) {
