@@ -13,19 +13,22 @@ import android.support.v4.app.ActivityCompat
 import android.view.View
 import android.widget.RelativeLayout
 
-class MainActivity : Activity(), GallowsRecognizer.Listener {
-    // https://www.androidhive.info/2014/07/android-speech-to-text-tutorial/
+class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.Listener {
+    // https://stackoverflow.com/questions/26781436/modify-speech-recognition-without-popup
     private var speechInputText: TextView? = null
     private var speechButton: ImageButton? = null
     private var activityContainer: RelativeLayout? = null
     private var gallowsRecognizer: GallowsRecognizer? = null
+    private var gallowsController: GallowsController? = null
     private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 100
 
+    // region lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         gallowsRecognizer = GallowsRecognizer(this, this)
+        gallowsController = GallowsController(this)
         speechInputText = activity_main_text
         speechButton = activity_main_speak_button
         activityContainer = activity_main_container
@@ -46,9 +49,15 @@ class MainActivity : Activity(), GallowsRecognizer.Listener {
         gallowsRecognizer?.destroy()
         gallowsRecognizer = null
     }
+    // endregion
 
-    override fun onSpeechRecognized(text: String) {
-        speechInputText?.text = text
+    // region recognizer
+    override fun onBeginRecognized() {
+        this.gallowsController?.startGame()
+    }
+
+    override fun onLetterRecognized(letter: Char) {
+        this.gallowsController?.checkLetter(letter)
     }
 
     override fun onError(text: String) {
@@ -57,8 +66,8 @@ class MainActivity : Activity(), GallowsRecognizer.Listener {
 
     override fun onPermissionNeeded() {
         ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.RECORD_AUDIO),
-                MY_PERMISSIONS_REQUEST_RECORD_AUDIO)
+                                           arrayOf(Manifest.permission.RECORD_AUDIO),
+                                           MY_PERMISSIONS_REQUEST_RECORD_AUDIO)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -74,4 +83,35 @@ class MainActivity : Activity(), GallowsRecognizer.Listener {
             }
         }
     }
+    // endregion
+
+    override fun onWordDefined(partialWord: String) {
+        this.speechInputText?.text = partialWord
+    }
+
+    override fun onLetterHit(partialWord: String) {
+        this.speechInputText?.text = partialWord
+    }
+
+    override fun onLetterMiss(remainingAttempts: Int, wrongLetters: MutableList<Char>) {
+        // TODO - change image according to number of remaining attempts, reproduce audio
+        // TODO - add to list of wrong letters
+    }
+
+    override fun onAlreadyMentionedLetter(letter: Char) {
+        Snackbar.make(activityContainer as View, "A letra $letter já foi utilizada!", Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun onGameWin(word: String) {
+        this.gallowsRecognizer?.shouldRecognizeLetters = false
+        this.speechInputText?.text = word
+        // TODO - reproduce audio
+    }
+
+    override fun onGameLose(word: String) {
+        this.gallowsRecognizer?.shouldRecognizeLetters = false
+        this.speechInputText?.text = word
+        // TODO - update image, reproduce audio
+    }
+    // endregion
 }
