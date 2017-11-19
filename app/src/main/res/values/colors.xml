@@ -6,5 +6,6 @@
     <color name="white">#ffffff</color>
     <color name="purple">#ffc2ff</color>
     <color name="bg_gradient_start">#00b479</color>
-    <color name="bg_gradient_end">#00a0b7</color>
+    <color name="bg_gradient_end">#01c2de</color>
+    <color name="bg_button_fill">#f7b239</color>
 </resources>

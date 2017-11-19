@@ -34,9 +34,10 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsRecognizer = GallowsRecognizer(this, this)
         gallowsController = GallowsController(this, this)
         gallowsWord = activity_main_gallows_word
+        gallowsWord?.letterSpacing = 0.3f
         speechStatus = activity_main_speech_status_text
         // TODO - remove this debug. The error/hit treatment will be done with messages/images/sounds
-        gallowsDebug = activity_main_gallows_debug
+        // gallowsDebug = activity_main_gallows_debug
         gallowsGuide = activity_main_gallows_guide
         speechButton = activity_main_speak_button
         activityContainer = activity_main_container
