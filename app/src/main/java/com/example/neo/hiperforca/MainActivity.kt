@@ -18,6 +18,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     private var gallowsWord: TextView? = null
     private var speechStatus: TextView? = null
     private var gallowsDebug: TextView? = null
+    private var gallowsGuide: TextView? = null
     private var speechButton: ImageButton? = null
     private var activityContainer: RelativeLayout? = null
     private var gallowsRecognizer: GallowsRecognizer? = null
@@ -33,7 +34,9 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsController = GallowsController(this)
         gallowsWord = activity_main_gallows_word
         speechStatus = activity_main_speech_status_text
+        // TODO - remove this debug. The error/hit treatment will be done with messages/images/sounds
         gallowsDebug = activity_main_gallows_debug
+        gallowsGuide = activity_main_gallows_guide
         speechButton = activity_main_speak_button
         activityContainer = activity_main_container
 
@@ -56,28 +59,20 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     // endregion
 
     // region recognizer
-    override fun onBeginRecognized() {
-        gallowsController?.startGame()
-    }
-
-    override fun onLetterRecognized(letter: Char) {
-        gallowsController?.checkLetter(letter)
-    }
-
     override fun onError(text: String) {
         Snackbar.make(activityContainer as View, text, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onBeginningOfSpeech() {
-        speechStatus?.text = "Ouvindo..."
+        speechStatus?.text = resources.getString(R.string.listening)
     }
 
     override fun onEndOfSpeech() {
-        speechStatus?.text = "Ouvi!"
+        speechStatus?.text = ""
     }
 
     override fun onReadyForSpeech() {
-        speechStatus?.text = "Pronto!"
+        speechStatus?.text = resources.getString(R.string.ready_for_listening)
     }
 
     override fun onPermissionNeeded() {
@@ -94,15 +89,28 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     gallowsRecognizer?.listen()
                 } else {
-                    gallowsWord?.text = "Sem permissão!"
+                    onError(resources.getString(R.string.error_permission))
                 }
             }
         }
     }
+
+    override fun onBeginRecognized() {
+        gallowsController?.startGame()
+    }
+
+    override fun onLetterRecognized(letter: Char) {
+        gallowsController?.checkLetter(letter)
+    }
     // endregion
 
+
+    // region controller
     override fun onWordDefined(partialWord: String) {
         gallowsWord?.text = partialWord
+        // TODO - reset image to the first one
+        gallowsDebug?.text = ""
+        gallowsGuide?.text = resources.getString(R.string.say_letter)
     }
 
     override fun onLetterHit(partialWord: String) {
@@ -118,20 +126,23 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
 
     override fun onAlreadyMentionedLetter(letter: Char) {
         gallowsDebug?.text = ""
-        Snackbar.make(activityContainer as View, "A letra $letter já foi utilizada!", Snackbar.LENGTH_LONG).show()
+        val text = String.format(resources.getString(R.string.already_used_letter), letter)
+        Snackbar.make(activityContainer as View, text, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onGameWin(word: String) {
         gallowsRecognizer?.shouldRecognizeLetters = false
         gallowsWord?.text = word
-        gallowsDebug?.text = "GANHOOOU. Fale começar para jogar novamente!"
+        gallowsDebug?.text = "GANHOOOU"
+        gallowsGuide?.text = resources.getString(R.string.say_start_again)
         // TODO - reproduce audio
     }
 
     override fun onGameLose(word: String) {
         gallowsRecognizer?.shouldRecognizeLetters = false
         gallowsWord?.text = word
-        gallowsDebug?.text = "PERDEEEU. Fale começar para jogar novamente!"
+        gallowsDebug?.text = "PERDEEEU"
+        gallowsGuide?.text = resources.getString(R.string.say_start_again)
         // TODO - update image, reproduce audio
     }
     // endregion

@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import com.example.neo.hiperforca.R
 import java.util.*
 
 /**
@@ -98,20 +99,18 @@ class SpeechRecognizerService(val context: Context, val listener: Listener): Rec
     }
 
     private fun getErrorText(errorCode: Int): String {
-        val message: String
-        when (errorCode) {
-            SpeechRecognizer.ERROR_AUDIO -> message = "Audio recording error"
-            SpeechRecognizer.ERROR_CLIENT -> message = "Client side error"
-            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> message = "Insufficient permissions"
-            SpeechRecognizer.ERROR_NETWORK -> message = "Network error"
-            SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> message = "Network timeout"
-            SpeechRecognizer.ERROR_NO_MATCH -> message = "No match"
-            SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> message = "RecognitionService busy"
-            SpeechRecognizer.ERROR_SERVER -> message = "error from server"
-            SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> message = "No speech input"
-            else -> message = "Didn't understand, please try again."
-        }
-        return message
+        val resourceId = when (errorCode) {
+                            SpeechRecognizer.ERROR_AUDIO -> R.string.error_recording_audio
+                            SpeechRecognizer.ERROR_CLIENT -> R.string.error_client_side
+                            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> R.string.error_permission
+                            SpeechRecognizer.ERROR_NETWORK -> R.string.error_network
+                            SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> R.string.error_network_timeout
+                            SpeechRecognizer.ERROR_NO_MATCH -> R.string.error_no_match
+                            SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> R.string.error_recognizer_busy
+                            SpeechRecognizer.ERROR_SERVER -> R.string.error_server
+                            SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> R.string.error_speech_timeout
+                            else -> R.string.error_default }
+        return context.resources.getString(resourceId)
     }
 
     private fun hasAudioPermission(): Boolean {
