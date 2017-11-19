@@ -47,4 +47,95 @@
         <item>y</item>
         <item>z</item>
     </string-array>
+    <string-array name="words">
+        <item>backbone</item>
+        <item>telecomunicacoes</item>
+        <item>baud rate</item>
+        <item>backplane</item>
+        <item>banda</item>
+        <item>bluetooth</item>
+        <item>dominio</item>
+        <item>broadcast</item>
+        <item>browser</item>
+        <item>bridge</item>
+        <item>cliente</item>
+        <item>datagrama</item>
+        <item>pacote</item>
+        <item>osi</item>
+        <item>aplicacao</item>
+        <item>tcp</item>
+        <item>voip</item>
+        <item>telnet</item>
+        <item>ftp</item>
+        <item>servidor</item>
+        <item>api</item>
+        <item>switch</item>
+        <item>roteador</item>
+        <item>dns</item>
+        <item>colisao</item>
+        <item>wireshark</item>
+        <item>sniffer</item>
+        <item>download</item>
+        <item>multimidia</item>
+        <item>hipermidia</item>
+        <item>ethernet</item>
+        <item>coaxial</item>
+        <item>email</item>
+        <item>firewall</item>
+        <item>udp</item>
+        <item>frame</item>
+        <item>gateway</item>
+        <item>camada</item>
+        <item>fisica</item>
+        <item>enlace</item>
+        <item>rede</item>
+        <item>transporte</item>
+        <item>sessao</item>
+        <item>apresentacao</item>
+        <item>quadro</item>
+        <item>http</item>
+        <item>html</item>
+        <item>overhead</item>
+        <item>cabecalho</item>
+        <item>transmissao</item>
+        <item>hub</item>
+        <item>internet</item>
+        <item>torrent</item>
+        <item>iso</item>
+        <item>repetidor</item>
+        <item>sinal</item>
+        <item>lan</item>
+        <item>vpn</item>
+        <item>internet</item>
+        <item>multicast</item>
+        <item>multiplexacao</item>
+        <item>simplex</item>
+        <item>half duplex</item>
+        <item>full duplex</item>
+        <item>ping</item>
+        <item>protocolo</item>
+        <item>canal</item>
+        <item>porta</item>
+        <item>conexao</item>
+        <item>comunicacao</item>
+        <item>provedor</item>
+        <item>wireless</item>
+        <item>iot</item>
+        <item>modem</item>
+        <item>polling</item>
+        <item>estacao</item>
+        <item>arquitetura</item>
+        <item>topologia</item>
+        <item>assinatura</item>
+        <item>host</item>
+        <item>acknowledgement</item>
+        <item>rajada</item>
+        <item>jitter</item>
+        <item>atraso</item>
+        <item>barramento</item>
+        <item>cache</item>
+        <item>cluster</item>
+        <item>cookie</item>
+        <item>datacenter</item>
+    </string-array>
 </resources>

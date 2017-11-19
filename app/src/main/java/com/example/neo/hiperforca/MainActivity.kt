@@ -31,7 +31,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         setContentView(R.layout.activity_main)
 
         gallowsRecognizer = GallowsRecognizer(this, this)
-        gallowsController = GallowsController(this)
+        gallowsController = GallowsController(this, this)
         gallowsWord = activity_main_gallows_word
         speechStatus = activity_main_speech_status_text
         // TODO - remove this debug. The error/hit treatment will be done with messages/images/sounds
