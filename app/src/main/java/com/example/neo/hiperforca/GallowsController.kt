@@ -26,7 +26,7 @@ class GallowsController(val context: Context, val listener: Listener) {
 
     fun startGame() {
         hasActiveGame = true
-        remainingAttempts = 5
+        remainingAttempts = 6
         alreadyMentionedLetters = mutableListOf()
         wrongLetters = mutableListOf()
         partialWord = ""

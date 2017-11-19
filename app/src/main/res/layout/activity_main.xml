@@ -18,6 +18,7 @@
         android:textStyle="bold" />
 
     <ImageView
+        android:id="@+id/activity_main_gallows_image"
         android:layout_width="256dp"
         android:layout_height="500dp"
         android:layout_alignParentBottom="true"
