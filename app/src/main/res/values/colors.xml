@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#0ea97e</color>
+    <color name="colorPrimaryDark">#0d8960</color>
+    <color name="colorAccent">#52dbdf</color>
     <color name="white">#ffffff</color>
-    <color name="bg_gradient_start">#31244e</color>
-    <color name="bg_gradient_end">#6b394c</color>
+    <color name="purple">#ffc2ff</color>
+    <color name="bg_gradient_start">#00b479</color>
+    <color name="bg_gradient_end">#01c2de</color>
+    <color name="bg_button_fill">#f7b239</color>
 </resources>

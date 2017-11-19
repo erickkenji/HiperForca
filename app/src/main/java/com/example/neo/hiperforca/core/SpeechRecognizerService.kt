@@ -16,7 +16,7 @@ import java.util.*
 /**
  * Created by isabella on 17/11/17.
  */
-class SpeechRecognizerService(val context: Context, val listener: Listener): RecognitionListener {
+class SpeechRecognizerService(private val context: Context, private val listener: Listener): RecognitionListener {
     private var speech: SpeechRecognizer? = null
     private var recognizerIntent: Intent? = null
     private val LOG_TAG = "VoiceRecognition"

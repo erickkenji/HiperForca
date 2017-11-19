@@ -11,15 +11,17 @@ import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.view.View
+import android.widget.ImageView
 import android.widget.RelativeLayout
 
 class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.Listener {
     // https://stackoverflow.com/questions/26781436/modify-speech-recognition-without-popup
     private var gallowsWord: TextView? = null
     private var speechStatus: TextView? = null
-    private var gallowsDebug: TextView? = null
     private var gallowsGuide: TextView? = null
-    private var speechButton: ImageButton? = null
+    private var gallowsWrongLetters: TextView? = null
+    private var speechButton: ImageView? = null
+    private var gallowsImage: ImageView? = null
     private var activityContainer: RelativeLayout? = null
     private var gallowsRecognizer: GallowsRecognizer? = null
     private var gallowsController: GallowsController? = null
@@ -31,13 +33,14 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         setContentView(R.layout.activity_main)
 
         gallowsRecognizer = GallowsRecognizer(this, this)
-        gallowsController = GallowsController(this)
+        gallowsController = GallowsController(this, this)
         gallowsWord = activity_main_gallows_word
+        gallowsWrongLetters = activity_main_gallows_wrong_letters
+        gallowsWord?.letterSpacing = 0.3f
         speechStatus = activity_main_speech_status_text
-        // TODO - remove this debug. The error/hit treatment will be done with messages/images/sounds
-        gallowsDebug = activity_main_gallows_debug
         gallowsGuide = activity_main_gallows_guide
         speechButton = activity_main_speak_button
+        gallowsImage = activity_main_gallows_image
         activityContainer = activity_main_container
 
         // hide the action bar
@@ -108,24 +111,29 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     // region controller
     override fun onWordDefined(partialWord: String) {
         gallowsWord?.text = partialWord
-        // TODO - reset image to the first one
-        gallowsDebug?.text = ""
+        gallowsWrongLetters?.text = ""
+        gallowsImage?.setImageResource(R.drawable.ico_gallow)
         gallowsGuide?.text = resources.getString(R.string.say_letter)
     }
 
     override fun onLetterHit(partialWord: String) {
-        gallowsDebug?.text = ""
         gallowsWord?.text = partialWord
     }
 
     override fun onLetterMiss(remainingAttempts: Int, wrongLetters: MutableList<Char>) {
-        gallowsDebug?.text = "ERROOOOU! Tentativas restantes: $remainingAttempts"
-        // TODO - change image according to number of remaining attempts, reproduce audio
-        // TODO - show list of wrong letters
+        val resId = when (remainingAttempts) {
+                        5 -> R.drawable.ico_gallow_head
+                        4 -> R.drawable.ico_gallow_torso
+                        3 -> R.drawable.ico_gallow_rarm
+                        2 -> R.drawable.ico_gallow_larm
+                        1 -> R.drawable.ico_gallow_rleg
+                        else -> R.drawable.ico_gallow_head
+                    }
+        gallowsImage?.setImageResource(resId)
+        gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
     }
 
     override fun onAlreadyMentionedLetter(letter: Char) {
-        gallowsDebug?.text = ""
         val text = String.format(resources.getString(R.string.already_used_letter), letter)
         Snackbar.make(activityContainer as View, text, Snackbar.LENGTH_LONG).show()
     }
@@ -133,17 +141,24 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     override fun onGameWin(word: String) {
         gallowsRecognizer?.shouldRecognizeLetters = false
         gallowsWord?.text = word
-        gallowsDebug?.text = "GANHOOOU"
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
-        // TODO - reproduce audio
+        gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
     }
 
-    override fun onGameLose(word: String) {
+    override fun onGameLose(word: String, wrongLetters: MutableList<Char>) {
         gallowsRecognizer?.shouldRecognizeLetters = false
         gallowsWord?.text = word
-        gallowsDebug?.text = "PERDEEEU"
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
-        // TODO - update image, reproduce audio
+        gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
+        gallowsImage?.setImageResource(R.drawable.ico_gallow_body)
     }
     // endregion
+
+    //region private
+    private fun formatWrongLetter(wrongLetters: MutableList<Char>): String {
+        var formattedLetters = ""
+        wrongLetters.forEach { char -> formattedLetters += if (formattedLetters.isBlank()) char else ", " + char }
+        return formattedLetters
+    }
+    //endregion
 }

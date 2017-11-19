@@ -1,35 +1,37 @@
 package com.example.neo.hiperforca
 
+import android.content.Context
+import java.util.concurrent.ThreadLocalRandom
+
 /**
  * Created by isabella on 18/11/17.
  */
-class GallowsController(val listener: Listener) {
+class GallowsController(private val context: Context, private val listener: Listener) {
     interface Listener {
         fun onWordDefined(partialWord: String)
         fun onLetterHit(partialWord: String)
         fun onLetterMiss(remainingAttempts: Int, wrongLetters: MutableList<Char>)
         fun onGameWin(word: String)
-        fun onGameLose(word: String)
+        fun onGameLose(word: String, wrongLetters: MutableList<Char>)
         fun onAlreadyMentionedLetter(letter: Char)
     }
 
     var hasActiveGame: Boolean = false
-    var alreadyMentionedLetters: MutableList<Char> = mutableListOf()
-    var wrongLetters: MutableList<Char> = mutableListOf()
-    var partialWord: String = ""
+    private var alreadyMentionedLetters: MutableList<Char> = mutableListOf()
+    private var wrongLetters: MutableList<Char> = mutableListOf()
+    private var partialWord: String = ""
     private var remainingAttempts: Int = 5
     lateinit private var word: String
 
     fun startGame() {
         hasActiveGame = true
-        remainingAttempts = 5
+        remainingAttempts = 6
         alreadyMentionedLetters = mutableListOf()
         wrongLetters = mutableListOf()
         partialWord = ""
-        // TODO - return word from database
-        word = "regina"
+        word = getRandomWord()
         // Fills the words with blank spaces
-        word.forEach { partialWord += "_" }
+        word.forEach { char -> if (char == ' ') partialWord += char else partialWord += '_' }
         listener.onWordDefined(partialWord)
     }
 
@@ -69,9 +71,15 @@ class GallowsController(val listener: Listener) {
 
         if (remainingAttempts <= 0) {
             hasActiveGame = false
-            listener.onGameLose(word)
+            listener.onGameLose(word, wrongLetters)
         } else {
             listener.onLetterMiss(remainingAttempts, wrongLetters)
         }
+    }
+
+    private fun getRandomWord(): String {
+        val wordsArray = context.resources.getStringArray(R.array.words)
+        val rand = ThreadLocalRandom.current().nextInt(0, wordsArray.size)
+        return wordsArray[rand]
     }
 }
