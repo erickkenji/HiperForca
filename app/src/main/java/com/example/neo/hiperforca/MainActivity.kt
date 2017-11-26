@@ -11,15 +11,13 @@ import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.content.DialogInterface
-import android.R.string.cancel
+import android.widget.Toolbar
 
-
-
-class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.Listener {
+class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsController.Listener {
     // https://stackoverflow.com/questions/26781436/modify-speech-recognition-without-popup
     private var gallowsWord: TextView? = null
     private var speechStatus: TextView? = null
@@ -52,6 +50,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
 
         // hide the action bar
         // actionBar?.hide()
+        setSupportActionBar(activity_main_toolbar)
         speechButton?.setOnClickListener { gallowsRecognizer?.listen() }
     }
 
