@@ -1,19 +1,25 @@
 package com.example.neo.hiperforca
 
 import android.content.Context
+import android.os.CountDownTimer
 import java.util.concurrent.ThreadLocalRandom
 
 /**
  * Created by isabella on 18/11/17.
  */
-class GallowsController(private val context: Context, private val listener: Listener) {
+class GallowsController(private val context: Context, private val listener: Listener): GallowsTimer.Listener {
     interface Listener {
         fun onWordDefined(partialWord: String)
         fun onLetterHit(partialWord: String)
         fun onLetterMiss(remainingAttempts: Int, wrongLetters: MutableList<Char>)
         fun onGameWin(word: String)
-        fun onGameLose(word: String, wrongLetters: MutableList<Char>)
+        fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean)
         fun onAlreadyMentionedLetter(letter: Char)
+        fun onTimerTick(remainingSeconds: Long)
+    }
+
+    companion object {
+        val SECONDS_TO_PLAY: Long = 100
     }
 
     var hasActiveGame: Boolean = false
@@ -21,8 +27,10 @@ class GallowsController(private val context: Context, private val listener: List
     private var wrongLetters: MutableList<Char> = mutableListOf()
     private var partialWord: String = ""
     private var remainingAttempts: Int = 5
+    private var timer: GallowsTimer? = null
     lateinit private var word: String
 
+    // region controller
     fun startGame() {
         hasActiveGame = true
         remainingAttempts = 6
@@ -32,6 +40,8 @@ class GallowsController(private val context: Context, private val listener: List
         word = getRandomWord()
         // Fills the words with blank spaces
         word.forEach { char -> if (char == ' ') partialWord += char else partialWord += '_' }
+        timer = GallowsTimer((SECONDS_TO_PLAY * 1000) + 1, 1000, this)
+        timer?.start()
         listener.onWordDefined(partialWord)
     }
 
@@ -59,6 +69,7 @@ class GallowsController(private val context: Context, private val listener: List
 
         if (partialWord == word) {
             hasActiveGame = false
+            timer?.cancel()
             listener.onGameWin(word)
         } else {
             listener.onLetterHit(partialWord)
@@ -71,7 +82,8 @@ class GallowsController(private val context: Context, private val listener: List
 
         if (remainingAttempts <= 0) {
             hasActiveGame = false
-            listener.onGameLose(word, wrongLetters)
+            timer?.cancel()
+            listener.onGameLose(word, wrongLetters, false)
         } else {
             listener.onLetterMiss(remainingAttempts, wrongLetters)
         }
@@ -82,4 +94,14 @@ class GallowsController(private val context: Context, private val listener: List
         val rand = ThreadLocalRandom.current().nextInt(0, wordsArray.size)
         return wordsArray[rand]
     }
+
+    override fun onTimerTick(remainingSeconds: Long) {
+        listener.onTimerTick(remainingSeconds)
+    }
+
+    override fun onTimerFinished() {
+        hasActiveGame = false
+        listener.onGameLose(word, wrongLetters, true)
+    }
+    // end region
 }

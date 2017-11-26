@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -20,6 +21,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     private var speechStatus: TextView? = null
     private var gallowsGuide: TextView? = null
     private var gallowsWrongLetters: TextView? = null
+    private var gallowsTimer: TextView? = null
     private var speechButton: ImageView? = null
     private var gallowsImage: ImageView? = null
     private var activityContainer: RelativeLayout? = null
@@ -35,8 +37,9 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsRecognizer = GallowsRecognizer(this, this)
         gallowsController = GallowsController(this, this)
         gallowsWord = activity_main_gallows_word
-        gallowsWrongLetters = activity_main_gallows_wrong_letters
         gallowsWord?.letterSpacing = 0.3f
+        gallowsWrongLetters = activity_main_gallows_wrong_letters
+        gallowsTimer = activity_main_gallows_timer
         speechStatus = activity_main_speech_status_text
         gallowsGuide = activity_main_gallows_guide
         speechButton = activity_main_speak_button
@@ -114,6 +117,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsWrongLetters?.text = ""
         gallowsImage?.setImageResource(R.drawable.ico_gallow)
         gallowsGuide?.text = resources.getString(R.string.say_letter)
+        setTimerTextAndColor(GallowsController.SECONDS_TO_PLAY)
     }
 
     override fun onLetterHit(partialWord: String) {
@@ -145,12 +149,20 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
     }
 
-    override fun onGameLose(word: String, wrongLetters: MutableList<Char>) {
+    override fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean) {
         gallowsRecognizer?.shouldRecognizeLetters = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
         gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
         gallowsImage?.setImageResource(R.drawable.ico_gallow_body)
+
+        if (lostByTime) {
+            setTimerTextAndColor(0)
+        }
+    }
+
+    override fun onTimerTick(remainingSeconds: Long) {
+        setTimerTextAndColor(remainingSeconds)
     }
     // endregion
 
@@ -159,6 +171,33 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         var formattedLetters = ""
         wrongLetters.forEach { char -> formattedLetters += if (formattedLetters.isBlank()) char else ", " + char }
         return formattedLetters
+    }
+
+    private fun setTimerTextAndColor(remainingSeconds: Long) {
+        val totalSeconds = GallowsController.SECONDS_TO_PLAY
+        gallowsTimer?.text = remainingSeconds.toString()
+        // Extracting the colorId on a val and setting later when using "when" is not working
+        // for a reason that goes beyond my comprehension
+        // The code bellow doesn't work either
+        //        when (remainingSeconds) {
+        //            in totalSeconds..(totalSeconds * 0.75).toInt() ->
+        //            in ((totalSeconds * 0.75).toInt() - 1)..(totalSeconds * 0.5).toInt() -> gallowsTimer?.setTextColor(ContextCompat.getColor(this, R.color.color_alert))
+        //            in ((totalSeconds * 0.5).toInt() - 1)..(totalSeconds * 0.25).toInt() -> gallowsTimer?.setTextColor(ContextCompat.getColor(this, R.color.color_alert_2))
+        //            in ((totalSeconds * 0.25).toInt() - 1)..0 -> gallowsTimer?.setTextColor(ContextCompat.getColor(this, R.color.color_danger))
+        //        }
+        val colorId = if (totalSeconds >= remainingSeconds && remainingSeconds >= (totalSeconds * 0.75).toInt()) {
+                        R.color.white
+                    } else if (((totalSeconds * 0.75).toInt() - 1) >= remainingSeconds && remainingSeconds >= (totalSeconds * 0.5).toInt()) {
+                        R.color.color_alert
+                    } else if (((totalSeconds * 0.5).toInt() - 1) >= remainingSeconds && remainingSeconds >= (totalSeconds * 0.25).toInt()) {
+                        R.color.color_alert_2
+                    } else if (((totalSeconds * 0.25).toInt() - 1) >= remainingSeconds && remainingSeconds >= 0) {
+                        R.color.color_danger
+                    } else {
+                        R.color.white
+                    }
+
+        gallowsTimer?.setTextColor(ContextCompat.getColor(this, colorId))
     }
     //endregion
 }
