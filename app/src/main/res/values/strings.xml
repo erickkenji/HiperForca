@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HiperForca</string>
-    <string name="action_settings">Configurações</string>
+    <string name="rules_activity">Como jogar</string>
+    <string name="action_help">Ajuda</string>
     <string name="letter">letra</string>
     <string name="word">palavra</string>
     <string name="start">começar</string>

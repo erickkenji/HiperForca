@@ -12,8 +12,8 @@ class GallowsController(private val context: Context, private val listener: List
         fun onWordDefined(partialWord: String)
         fun onLetterHit(partialWord: String)
         fun onLetterMiss(remainingAttempts: Int, wrongLetters: MutableList<Char>)
-        fun onGameWin(word: String)
-        fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean)
+        fun onGameWin(word: String, newScore: Int)
+        fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean, newScore: Int)
         fun onAlreadyMentionedLetter(letter: Char)
         fun onTimerTick(remainingSeconds: Long)
     }
@@ -27,11 +27,13 @@ class GallowsController(private val context: Context, private val listener: List
     private var wrongLetters: MutableList<Char> = mutableListOf()
     private var partialWord: String = ""
     private var remainingAttempts: Int = 5
+    private var remainingSeconds: Long = SECONDS_TO_PLAY
     private var timer: GallowsTimer? = null
     lateinit private var word: String
 
     // region timer
     override fun onTimerTick(remainingSeconds: Long) {
+        this.remainingSeconds = remainingSeconds
         listener.onTimerTick(remainingSeconds)
     }
 
@@ -112,16 +114,18 @@ class GallowsController(private val context: Context, private val listener: List
         return wordsArray[rand]
     }
 
-    private fun onGameWin() {
+    private fun onGameWin(bonus: Int = 0) {
         hasActiveGame = false
         timer?.cancel()
-        listener.onGameWin(word)
+        val newScore = GallowsPreferences.addScore(context, remainingAttempts + bonus)
+        listener.onGameWin(word, newScore)
     }
 
-    private fun onGameLose(lostByTime: Boolean) {
+    private fun onGameLose(lostByTime: Boolean, penalty: Int = 0) {
         hasActiveGame = false
         timer?.cancel()
-        listener.onGameLose(word, wrongLetters, lostByTime)
+        val newScore = GallowsPreferences.addScore(context, penalty)
+        listener.onGameLose(word, wrongLetters, lostByTime, newScore)
     }
     // endregion
 }

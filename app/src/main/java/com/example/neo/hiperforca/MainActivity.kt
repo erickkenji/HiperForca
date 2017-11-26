@@ -1,8 +1,8 @@
 package com.example.neo.hiperforca
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.widget.TextView
@@ -12,10 +12,11 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.Toolbar
+import rules.RulesActivity
 
 class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsController.Listener {
     // https://stackoverflow.com/questions/26781436/modify-speech-recognition-without-popup
@@ -58,6 +59,17 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_help -> {
+                intent = Intent(this, RulesActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroy() {
@@ -157,14 +169,14 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         Snackbar.make(activityContainer as View, text, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun onGameWin(word: String) {
+    override fun onGameWin(word: String, newScore: Int) {
         gallowsRecognizer?.shouldRecognizeLettersOrWord = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
         gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
     }
 
-    override fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean) {
+    override fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean, newScore: Int) {
         gallowsRecognizer?.shouldRecognizeLettersOrWord = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
