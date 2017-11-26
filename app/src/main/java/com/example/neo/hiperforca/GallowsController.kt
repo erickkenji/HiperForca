@@ -30,6 +30,17 @@ class GallowsController(private val context: Context, private val listener: List
     private var timer: GallowsTimer? = null
     lateinit private var word: String
 
+    // region timer
+    override fun onTimerTick(remainingSeconds: Long) {
+        listener.onTimerTick(remainingSeconds)
+    }
+
+    override fun onTimerFinished() {
+        hasActiveGame = false
+        onGameLose(true)
+    }
+    // endregion
+
     // region controller
     fun startGame() {
         hasActiveGame = true
@@ -59,6 +70,16 @@ class GallowsController(private val context: Context, private val listener: List
         }
     }
 
+    fun checkWord(word: String) {
+        if (this.word == word) {
+            onGameWin()
+        } else {
+            onGameLose(false)
+        }
+    }
+    // endregion
+
+    // region private
     private fun handleHit(letter: Char) {
         val positions = mutableListOf<Int>()
         word.forEachIndexed { index, char -> if (char.toLowerCase() == letter) {
@@ -68,9 +89,7 @@ class GallowsController(private val context: Context, private val listener: List
         partialWord = builder.toString()
 
         if (partialWord == word) {
-            hasActiveGame = false
-            timer?.cancel()
-            listener.onGameWin(word)
+            onGameWin()
         } else {
             listener.onLetterHit(partialWord)
         }
@@ -81,9 +100,7 @@ class GallowsController(private val context: Context, private val listener: List
         remainingAttempts -= 1
 
         if (remainingAttempts <= 0) {
-            hasActiveGame = false
-            timer?.cancel()
-            listener.onGameLose(word, wrongLetters, false)
+            onGameLose(false)
         } else {
             listener.onLetterMiss(remainingAttempts, wrongLetters)
         }
@@ -95,13 +112,16 @@ class GallowsController(private val context: Context, private val listener: List
         return wordsArray[rand]
     }
 
-    override fun onTimerTick(remainingSeconds: Long) {
-        listener.onTimerTick(remainingSeconds)
+    private fun onGameWin() {
+        hasActiveGame = false
+        timer?.cancel()
+        listener.onGameWin(word)
     }
 
-    override fun onTimerFinished() {
+    private fun onGameLose(lostByTime: Boolean) {
         hasActiveGame = false
-        listener.onGameLose(word, wrongLetters, true)
+        timer?.cancel()
+        listener.onGameLose(word, wrongLetters, lostByTime)
     }
-    // end region
+    // endregion
 }

@@ -2,9 +2,9 @@ package com.example.neo.hiperforca
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.Menu
-import android.widget.ImageButton
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.pm.PackageManager
@@ -14,6 +14,10 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.content.DialogInterface
+import android.R.string.cancel
+
+
 
 class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.Listener {
     // https://stackoverflow.com/questions/26781436/modify-speech-recognition-without-popup
@@ -47,7 +51,7 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
         activityContainer = activity_main_container
 
         // hide the action bar
-        actionBar?.hide()
+        // actionBar?.hide()
         speechButton?.setOnClickListener { gallowsRecognizer?.listen() }
     }
 
@@ -108,6 +112,18 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     override fun onLetterRecognized(letter: Char) {
         gallowsController?.checkLetter(letter)
     }
+
+    override fun onWordRecognized(word: String) {
+        // open modal
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(String.format(resources.getString(R.string.should_recognize_word), word))
+                .setPositiveButton(R.string.yes, { dialog, id -> gallowsController?.checkWord(word) })
+                .setNegativeButton(R.string.no, { dialog, id ->
+                    // User cancelled the dialog
+                })
+                .create()
+                .show()
+    }
     // endregion
 
 
@@ -143,14 +159,14 @@ class MainActivity : Activity(), GallowsRecognizer.Listener, GallowsController.L
     }
 
     override fun onGameWin(word: String) {
-        gallowsRecognizer?.shouldRecognizeLetters = false
+        gallowsRecognizer?.shouldRecognizeLettersOrWord = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
         gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
     }
 
     override fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean) {
-        gallowsRecognizer?.shouldRecognizeLetters = false
+        gallowsRecognizer?.shouldRecognizeLettersOrWord = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
         gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)

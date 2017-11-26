@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">HiperForca</string>
     <string name="action_settings">Configurações</string>
+    <string name="letter">letra</string>
+    <string name="word">palavra</string>
+    <string name="start">começar</string>
     <string name="tap_on_mic">Clique no microfone para falar</string>
-    <string name="say_letter">Diga \"letra\" seguido da letra desejada. Exemplo: \"letra a\"</string>
+    <string name="say_letter">Diga \"letra\" ou \"palavra\" seguido da letra/palavra desejada. Exemplo: \"letra a\" ou \"palavra android\"</string>
     <string name="say_start">Diga \"começar\" para jogar!</string>
     <string name="say_start_again">Diga \"começar\" para jogar novamente!</string>
     <string name="already_used_letter">A letra %1$s já foi utilizada!</string>
@@ -19,6 +22,9 @@
     <string name="error_server">Erro no servidor</string>
     <string name="error_speech_timeout">Não foi possível te entender. Por favor, tente novamente</string>
     <string name="error_default">Não foi possível te entender. Por favor, tente novamente</string>
+    <string name="should_recognize_word">Você tem certeza que deseja tentar a palavra \"%1$s\"?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
     <string-array name="letters">
         <item>a</item>
         <item>b</item>
