@@ -21,14 +21,6 @@ import tutorial.TutorialActivity
 
 class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsController.Listener {
     // https://stackoverflow.com/questions/26781436/modify-speech-recognition-without-popup
-    private var gallowsWord: TextView? = null
-    private var speechStatus: TextView? = null
-    private var gallowsGuide: TextView? = null
-    private var gallowsWrongLetters: TextView? = null
-    private var gallowsTimer: TextView? = null
-    private var gallowsScore: TextView? = null
-    private var speechButton: ImageView? = null
-    private var gallowsImage: ImageView? = null
     private var activityContainer: RelativeLayout? = null
     private var gallowsRecognizer: GallowsRecognizer? = null
     private var gallowsController: GallowsController? = null
@@ -38,25 +30,22 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        // layout setup
         gallowsRecognizer = GallowsRecognizer(this, this)
         gallowsController = GallowsController(this, this)
-        gallowsWord = activity_main_gallows_word
-        gallowsWord?.letterSpacing = 0.3f
-        gallowsWrongLetters = activity_main_gallows_wrong_letters
-        gallowsTimer = activity_main_gallows_timer
-        gallowsScore = activity_main_gallows_score
-        gallowsScore?.text = resources.getString(R.string.score).format(GallowsPreferences.getScore(this))
-        speechStatus = activity_main_speech_status_text
-        gallowsGuide = activity_main_gallows_guide
-        speechButton = activity_main_speak_button
-        gallowsImage = activity_main_gallows_image
+        activity_main_gallows_word?.letterSpacing = 0.3f
+        activity_main_gallows_score?.text = resources.getString(R.string.score).format(GallowsPreferences.getScore(this))
         activityContainer = activity_main_container
 
         // hide the action bar
         // actionBar?.hide()
         setSupportActionBar(activity_main_toolbar)
-        speechButton?.setOnClickListener { gallowsRecognizer?.listen() }
+        activity_main_speak_button?.setOnClickListener { gallowsRecognizer?.listen() }
+
+        if (GallowsPreferences.isFirstAccess(this)) {
+            startTutorialActivity()
+            GallowsPreferences.saveUserFirstAccess(this)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,8 +57,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_help -> {
-                intent = Intent(this, TutorialActivity::class.java)
-                startActivity(intent)
+                startTutorialActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -89,15 +77,15 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     }
 
     override fun onBeginningOfSpeech() {
-        speechStatus?.text = resources.getString(R.string.listening)
+        activity_main_speech_status_text?.text = resources.getString(R.string.listening)
     }
 
     override fun onEndOfSpeech() {
-        speechStatus?.text = ""
+        activity_main_speech_status_text?.text = ""
     }
 
     override fun onReadyForSpeech() {
-        speechStatus?.text = resources.getString(R.string.ready_for_listening)
+        activity_main_speech_status_text?.text = resources.getString(R.string.ready_for_listening)
     }
 
     override fun onPermissionNeeded() {
@@ -144,15 +132,15 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
 
     // region controller
     override fun onWordDefined(partialWord: String) {
-        gallowsWord?.text = partialWord
-        gallowsWrongLetters?.text = ""
-        gallowsImage?.setImageResource(R.drawable.ico_gallow)
-        gallowsGuide?.text = resources.getString(R.string.say_letter)
+        activity_main_gallows_word?.text = partialWord
+        activity_main_gallows_wrong_letters?.text = ""
+        activity_main_gallows_image?.setImageResource(R.drawable.ico_gallow)
+        activity_main_gallows_guide?.text = resources.getString(R.string.say_letter)
         setTimerTextAndColor(GlobalConstants.SECONDS_TO_PLAY)
     }
 
     override fun onLetterHit(partialWord: String) {
-        gallowsWord?.text = partialWord
+        activity_main_gallows_word?.text = partialWord
     }
 
     override fun onLetterMiss(remainingAttempts: Int, wrongLetters: MutableList<Char>) {
@@ -164,8 +152,8 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
                         1 -> R.drawable.ico_gallow_rleg
                         else -> R.drawable.ico_gallow_head
                     }
-        gallowsImage?.setImageResource(resId)
-        gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
+        activity_main_gallows_image?.setImageResource(resId)
+        activity_main_gallows_wrong_letters?.text = formatWrongLetter(wrongLetters)
     }
 
     override fun onAlreadyMentionedLetter(letter: Char) {
@@ -175,19 +163,19 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
 
     override fun onGameWin(word: String, newScore: Int) {
         gallowsRecognizer?.shouldRecognizeLettersOrWord = false
-        gallowsWord?.text = word
-        gallowsGuide?.text = resources.getString(R.string.say_start_again)
-        gallowsScore?.text = resources.getString(R.string.score).format(newScore)
-        gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
+        activity_main_gallows_word?.text = word
+        activity_main_gallows_guide?.text = resources.getString(R.string.say_start_again)
+        activity_main_gallows_score?.text = resources.getString(R.string.score).format(newScore)
+        activity_main_gallows_image?.setImageResource(R.drawable.ico_gallow_win)
     }
 
     override fun onGameLose(word: String, wrongLetters: MutableList<Char>, lostByTime: Boolean, newScore: Int) {
         gallowsRecognizer?.shouldRecognizeLettersOrWord = false
-        gallowsWord?.text = word
-        gallowsGuide?.text = resources.getString(R.string.say_start_again)
-        gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
-        gallowsScore?.text = resources.getString(R.string.score).format(newScore)
-        gallowsImage?.setImageResource(R.drawable.ico_gallow_body)
+        activity_main_gallows_word?.text = word
+        activity_main_gallows_guide?.text = resources.getString(R.string.say_start_again)
+        activity_main_gallows_wrong_letters?.text = formatWrongLetter(wrongLetters)
+        activity_main_gallows_score?.text = resources.getString(R.string.score).format(newScore)
+        activity_main_gallows_image?.setImageResource(R.drawable.ico_gallow_body)
 
         if (lostByTime) {
             setTimerTextAndColor(0)
@@ -200,6 +188,11 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     // endregion
 
     //region private
+    private fun startTutorialActivity() {
+        intent = Intent(this, TutorialActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun formatWrongLetter(wrongLetters: MutableList<Char>): String {
         var formattedLetters = ""
         wrongLetters.forEach { char -> formattedLetters += if (formattedLetters.isBlank()) char else ", " + char }
@@ -208,7 +201,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
 
     private fun setTimerTextAndColor(remainingSeconds: Long) {
         val totalSeconds = GlobalConstants.SECONDS_TO_PLAY
-        gallowsTimer?.text = remainingSeconds.toString()
+        activity_main_gallows_timer?.text = remainingSeconds.toString()
         // Extracting the colorId on a val and setting later when using "when" is not working
         // for a reason that goes beyond my comprehension
         // The code bellow doesn't work either
@@ -230,7 +223,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
                         R.color.white
                     }
 
-        gallowsTimer?.setTextColor(ContextCompat.getColor(this, colorId))
+        activity_main_gallows_timer?.setTextColor(ContextCompat.getColor(this, colorId))
     }
     //endregion
 }

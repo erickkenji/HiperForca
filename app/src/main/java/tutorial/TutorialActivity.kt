@@ -16,6 +16,7 @@ class TutorialActivity : AppCompatActivity() {
         activity_tutorial_pager.clipToPadding = false
         activity_tutorial_pager.pageMargin = 24
         activity_tutorial_pager.adapter = TutorialPagerAdapter(supportFragmentManager)
+        activity_tutorial_button.setOnClickListener { finish() }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
