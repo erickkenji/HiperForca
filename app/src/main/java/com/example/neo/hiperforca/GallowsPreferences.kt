@@ -8,7 +8,7 @@ import android.content.Context
  */
 object GallowsPreferences {
     private val SCORE_PREFERENCES = "com.example.HiperForca.SCORE_PREFERENCES"
-    private val SCORE_KEY = "com.example.HiperForca.SCORE_PREFERENCES"
+    private val SCORE_KEY = "SCORE_KEY"
 
     fun getScore(context: Context): Int {
         val preferences = context.getSharedPreferences(SCORE_PREFERENCES, Context.MODE_PRIVATE)

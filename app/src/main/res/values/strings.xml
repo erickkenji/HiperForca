@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">HiperForca</string>
-    <string name="rules_activity">Como jogar</string>
+    <string name="tutorial_activity">Como jogar</string>
     <string name="action_help">Ajuda</string>
     <string name="letter">letra</string>
     <string name="word">palavra</string>
     <string name="start">começar</string>
+    <string name="score">Pontos: %1$d</string>
     <string name="tap_on_mic">Clique no microfone para falar</string>
     <string name="say_letter">Diga \"letra\" ou \"palavra\" seguido da letra/palavra desejada. Exemplo: \"letra a\" ou \"palavra android\"</string>
     <string name="say_start">Diga \"começar\" para jogar!</string>

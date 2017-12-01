@@ -16,7 +16,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import rules.RulesActivity
+import com.example.neo.hiperforca.core.GlobalConstants
+import tutorial.TutorialActivity
 
 class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsController.Listener {
     // https://stackoverflow.com/questions/26781436/modify-speech-recognition-without-popup
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     private var gallowsGuide: TextView? = null
     private var gallowsWrongLetters: TextView? = null
     private var gallowsTimer: TextView? = null
+    private var gallowsScore: TextView? = null
     private var speechButton: ImageView? = null
     private var gallowsImage: ImageView? = null
     private var activityContainer: RelativeLayout? = null
@@ -43,6 +45,8 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         gallowsWord?.letterSpacing = 0.3f
         gallowsWrongLetters = activity_main_gallows_wrong_letters
         gallowsTimer = activity_main_gallows_timer
+        gallowsScore = activity_main_gallows_score
+        gallowsScore?.text = resources.getString(R.string.score).format(GallowsPreferences.getScore(this))
         speechStatus = activity_main_speech_status_text
         gallowsGuide = activity_main_gallows_guide
         speechButton = activity_main_speak_button
@@ -64,7 +68,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_help -> {
-                intent = Intent(this, RulesActivity::class.java)
+                intent = Intent(this, TutorialActivity::class.java)
                 startActivity(intent)
                 true
             }
@@ -127,7 +131,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     override fun onWordRecognized(word: String) {
         // open modal
         val builder = AlertDialog.Builder(this)
-        builder.setMessage(String.format(resources.getString(R.string.should_recognize_word), word))
+        builder.setMessage(resources.getString(R.string.should_recognize_word).format(word))
                 .setPositiveButton(R.string.yes, { dialog, id -> gallowsController?.checkWord(word) })
                 .setNegativeButton(R.string.no, { dialog, id ->
                     // User cancelled the dialog
@@ -144,7 +148,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         gallowsWrongLetters?.text = ""
         gallowsImage?.setImageResource(R.drawable.ico_gallow)
         gallowsGuide?.text = resources.getString(R.string.say_letter)
-        setTimerTextAndColor(GallowsController.SECONDS_TO_PLAY)
+        setTimerTextAndColor(GlobalConstants.SECONDS_TO_PLAY)
     }
 
     override fun onLetterHit(partialWord: String) {
@@ -165,7 +169,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     }
 
     override fun onAlreadyMentionedLetter(letter: Char) {
-        val text = String.format(resources.getString(R.string.already_used_letter), letter)
+        val text = resources.getString(R.string.already_used_letter).format(letter)
         Snackbar.make(activityContainer as View, text, Snackbar.LENGTH_LONG).show()
     }
 
@@ -173,6 +177,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         gallowsRecognizer?.shouldRecognizeLettersOrWord = false
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
+        gallowsScore?.text = resources.getString(R.string.score).format(newScore)
         gallowsImage?.setImageResource(R.drawable.ico_gallow_win)
     }
 
@@ -181,6 +186,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         gallowsWord?.text = word
         gallowsGuide?.text = resources.getString(R.string.say_start_again)
         gallowsWrongLetters?.text = formatWrongLetter(wrongLetters)
+        gallowsScore?.text = resources.getString(R.string.score).format(newScore)
         gallowsImage?.setImageResource(R.drawable.ico_gallow_body)
 
         if (lostByTime) {
@@ -201,7 +207,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
     }
 
     private fun setTimerTextAndColor(remainingSeconds: Long) {
-        val totalSeconds = GallowsController.SECONDS_TO_PLAY
+        val totalSeconds = GlobalConstants.SECONDS_TO_PLAY
         gallowsTimer?.text = remainingSeconds.toString()
         // Extracting the colorId on a val and setting later when using "when" is not working
         // for a reason that goes beyond my comprehension

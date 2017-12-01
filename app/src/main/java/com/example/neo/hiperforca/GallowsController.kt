@@ -1,7 +1,7 @@
 package com.example.neo.hiperforca
 
 import android.content.Context
-import android.os.CountDownTimer
+import com.example.neo.hiperforca.core.GlobalConstants
 import java.util.concurrent.ThreadLocalRandom
 
 /**
@@ -18,16 +18,12 @@ class GallowsController(private val context: Context, private val listener: List
         fun onTimerTick(remainingSeconds: Long)
     }
 
-    companion object {
-        val SECONDS_TO_PLAY: Long = 100
-    }
-
     var hasActiveGame: Boolean = false
     private var alreadyMentionedLetters: MutableList<Char> = mutableListOf()
     private var wrongLetters: MutableList<Char> = mutableListOf()
     private var partialWord: String = ""
-    private var remainingAttempts: Int = 5
-    private var remainingSeconds: Long = SECONDS_TO_PLAY
+    private var remainingAttempts: Int = GlobalConstants.NUMBER_OF_ATTEMPTS
+    private var remainingSeconds: Long = GlobalConstants.SECONDS_TO_PLAY
     private var timer: GallowsTimer? = null
     lateinit private var word: String
 
@@ -39,7 +35,7 @@ class GallowsController(private val context: Context, private val listener: List
 
     override fun onTimerFinished() {
         hasActiveGame = false
-        onGameLose(true)
+        onGameLose(true, GlobalConstants.TIME_PENALTY)
     }
     // endregion
 
@@ -53,7 +49,7 @@ class GallowsController(private val context: Context, private val listener: List
         word = getRandomWord()
         // Fills the words with blank spaces
         word.forEach { char -> if (char == ' ') partialWord += char else partialWord += '_' }
-        timer = GallowsTimer((SECONDS_TO_PLAY * 1000) + 1, 1000, this)
+        timer = GallowsTimer((GlobalConstants.SECONDS_TO_PLAY * 1000) + 1, 1000, this)
         timer?.start()
         listener.onWordDefined(partialWord)
     }
@@ -74,9 +70,9 @@ class GallowsController(private val context: Context, private val listener: List
 
     fun checkWord(word: String) {
         if (this.word == word) {
-            onGameWin()
+            onGameWin(GlobalConstants.WORD_HIT_BONUS)
         } else {
-            onGameLose(false)
+            onGameLose(false, GlobalConstants.WORD_ERROR_PENALTY)
         }
     }
     // endregion
@@ -117,14 +113,15 @@ class GallowsController(private val context: Context, private val listener: List
     private fun onGameWin(bonus: Int = 0) {
         hasActiveGame = false
         timer?.cancel()
-        val newScore = GallowsPreferences.addScore(context, remainingAttempts + bonus)
+        val score = (remainingAttempts + Math.floor(remainingSeconds.toDouble() / GlobalConstants.REMAINING_TIME_FACTOR)).toInt() + bonus
+        val newScore = GallowsPreferences.addScore(context, score)
         listener.onGameWin(word, newScore)
     }
 
     private fun onGameLose(lostByTime: Boolean, penalty: Int = 0) {
         hasActiveGame = false
         timer?.cancel()
-        val newScore = GallowsPreferences.addScore(context, penalty)
+        val newScore = GallowsPreferences.addScore(context, -1 * penalty)
         listener.onGameLose(word, wrongLetters, lostByTime, newScore)
     }
     // endregion
