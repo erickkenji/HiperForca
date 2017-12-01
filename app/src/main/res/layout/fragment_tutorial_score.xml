@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Pontuação"
+        android:text="@string/tutorial_score_title"
         android:textColor="@color/color_accent"
         android:layout_marginTop="8dp"
         android:textStyle="bold"
@@ -23,44 +23,44 @@
         android:orientation="vertical"
         android:layout_margin="16dp">
         <TextView
+            android:id="@+id/fragment_tutorial_score_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1. Ao vencer uma partida, você ganha pontos equivalentes a suas tentativas restantes: se você terminou com 5 tentativas sobrando, você garante 5 pontos!"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_score_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2. Também há um adicional de tempo! Caso você termine com 37 segundos restantes, por exemplo, você recebe mais 3 pontos!"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_score_third"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3. Você também ganha 5 pontos bônus caso tente dizer uma palavra inteira e acerte :)"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_score_fourth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4. Porém, caso você erre a palavra, você perde 5 pontos."
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_score_fifth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5. Outra penalidade é aplicada quando o tempo acaba: nesse caso, você perde outros 5 pontos"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_score_sixth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="6. Mas não desanime! Arregace as mangas, prepare a voz e mostre que você é um mestre das redes!"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>

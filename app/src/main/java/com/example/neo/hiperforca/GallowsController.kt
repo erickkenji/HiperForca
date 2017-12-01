@@ -113,7 +113,7 @@ class GallowsController(private val context: Context, private val listener: List
     private fun onGameWin(bonus: Int = 0) {
         hasActiveGame = false
         timer?.cancel()
-        val score = (remainingAttempts + Math.floor(remainingSeconds.toDouble() / GlobalConstants.REMAINING_TIME_FACTOR)).toInt() + bonus
+        val score = remainingAttempts + calculateTimeBonus(remainingSeconds) + bonus
         val newScore = GallowsPreferences.addScore(context, score)
         listener.onGameWin(word, newScore)
     }
@@ -125,4 +125,10 @@ class GallowsController(private val context: Context, private val listener: List
         listener.onGameLose(word, wrongLetters, lostByTime, newScore)
     }
     // endregion
+
+    companion object {
+        fun calculateTimeBonus(remainingSeconds: Long): Int {
+            return Math.floor(remainingSeconds.toDouble() / GlobalConstants.REMAINING_TIME_FACTOR).toInt()
+        }
+    }
 }

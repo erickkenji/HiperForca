@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Como jogar?"
+        android:text="@string/tutorial_rules_title"
         android:textColor="@color/color_accent"
         android:layout_marginTop="8dp"
         android:textStyle="bold"
@@ -22,44 +22,45 @@
         android:orientation="vertical"
         android:layout_margin="16dp">
         <TextView
+            android:id="@+id/fragment_tutorial_rules_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1. Aperte e solte o botão de microfone."
+            android:text="@string/tutorial_rules_first_rule"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_rules_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2. Quando o aplicativo estiver ouvindo, diga 'começar' para iniciar uma nova partida."
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_rules_third"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3. Quando a partida começar, aperte o microfone novamente e diga 'letra' seguido da letra que você quer dizer. Por exemplo, 'letra a'."
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_rules_fourth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4. Também é possível arriscar uma palavra, dizendo 'palavra' seguido da palavra desejada. Por exemplo, 'palavra redes'."
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_rules_fifth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5. Não se esqueça de que você tem apenas 6 tentativas!"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
         <TextView
+            android:id="@+id/fragment_tutorial_rules_sixth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="6. Ah, e você também tem apenas 100 segundos para adivinhar a palavra! :)"
             android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:textSize="15sp"/>
