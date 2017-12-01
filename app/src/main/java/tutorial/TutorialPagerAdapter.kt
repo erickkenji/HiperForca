@@ -19,4 +19,8 @@ class TutorialPagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapt
     override fun getCount(): Int {
         return 2
     }
+
+    override fun getPageWidth(position: Int): Float {
+        return 0.93f
+    }
 }

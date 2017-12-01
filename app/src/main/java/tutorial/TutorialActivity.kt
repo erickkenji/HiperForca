@@ -13,7 +13,8 @@ class TutorialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
-        activity_tutorial_pager_pagination.setupWithViewPager(activity_tutorial_pager)
+        activity_tutorial_pager.clipToPadding = false
+        activity_tutorial_pager.pageMargin = 24
         activity_tutorial_pager.adapter = TutorialPagerAdapter(supportFragmentManager)
     }
 

@@ -121,7 +121,7 @@ class GallowsController(private val context: Context, private val listener: List
     private fun onGameLose(lostByTime: Boolean, penalty: Int = 0) {
         hasActiveGame = false
         timer?.cancel()
-        val newScore = GallowsPreferences.addScore(context, -1 * penalty)
+        val newScore = GallowsPreferences.addScore(context, -penalty)
         listener.onGameLose(word, wrongLetters, lostByTime, newScore)
     }
     // endregion
