@@ -8,7 +8,7 @@
     <string name="score">Pontos: %1$d</string>
     <string name="tutorial_button">Entendi!</string>
     <string name="tap_on_mic">Clique no microfone para falar</string>
-    <string name="say_letter">Diga \"letra\" ou \"palavra\" seguido da letra/palavra desejada. Exemplo: \"letra a\" ou \"palavra android\"</string>
+    <string name="say_letter">Diga \"letra\" ou \"palavra\" seguido da letra/palavra desejada"</string>
     <string name="say_start">Diga \"começar\" para jogar!</string>
     <string name="say_start_again">Diga \"começar\" para jogar novamente!</string>
     <string name="already_used_letter">A letra %1$s já foi utilizada!</string>

@@ -10,10 +10,10 @@
         android:id="@+id/activity_tutorial_pager"
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="500dp"
         android:layout_marginTop="30dp"
-        android:paddingStart="36dp"
-        android:paddingEnd="24dp"/>
+        android:paddingStart="24dp"
+        android:paddingEnd="12dp"/>
 
     <Button
         android:id="@+id/activity_tutorial_button"

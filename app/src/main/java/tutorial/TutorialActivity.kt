@@ -14,7 +14,7 @@ class TutorialActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
         activity_tutorial_pager.clipToPadding = false
-        activity_tutorial_pager.pageMargin = 24
+        activity_tutorial_pager.pageMargin = 12
         activity_tutorial_pager.adapter = TutorialPagerAdapter(supportFragmentManager)
         activity_tutorial_button.setOnClickListener { finish() }
     }

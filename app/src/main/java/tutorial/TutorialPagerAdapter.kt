@@ -10,14 +10,15 @@ import android.support.v4.app.FragmentPagerAdapter
 class TutorialPagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager) {
     override fun getItem(position: Int): Fragment {
         return when(position) {
-            0 -> TutorialRulesFragment.newInstance()
-            1 -> TutorialScoreFragment()
+            0 -> TutorialWelcome.newInstance()
+            1 -> TutorialRulesFragment.newInstance()
+            2 -> TutorialScoreFragment()
             else -> TutorialRulesFragment.newInstance()
         }
     }
 
     override fun getCount(): Int {
-        return 2
+        return 3
     }
 
     override fun getPageWidth(position: Int): Float {
