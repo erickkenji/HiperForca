@@ -12,7 +12,7 @@ import com.example.neo.hiperforca.R
  */
 class TutorialScoreFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_tutorial_rules, container, false)
+        return inflater?.inflate(R.layout.fragment_tutorial_score, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
