@@ -13,9 +13,7 @@ class TutorialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
-        setSupportActionBar(activity_tutorial_toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        activity_tutorial_pager.adapter = TutorialPagerAdapter(supportFragmentManager)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
