@@ -1,6 +1,7 @@
 package com.example.neo.hiperforca
 
 import android.content.Context
+import com.example.neo.hiperforca.core.Preferences
 import com.example.neo.hiperforca.core.GlobalConstants
 import java.util.concurrent.ThreadLocalRandom
 
@@ -42,7 +43,7 @@ class GallowsController(private val context: Context, private val listener: List
     // region controller
     fun startGame() {
         hasActiveGame = true
-        remainingAttempts = 6
+        remainingAttempts = GlobalConstants.NUMBER_OF_ATTEMPTS
         alreadyMentionedLetters = mutableListOf()
         wrongLetters = mutableListOf()
         partialWord = ""
@@ -114,14 +115,14 @@ class GallowsController(private val context: Context, private val listener: List
         hasActiveGame = false
         timer?.cancel()
         val score = remainingAttempts + calculateTimeBonus(remainingSeconds) + bonus
-        val newScore = GallowsPreferences.addScore(context, score)
+        val newScore = Preferences.addScore(context, score)
         listener.onGameWin(word, newScore)
     }
 
     private fun onGameLose(lostByTime: Boolean, penalty: Int = 0) {
         hasActiveGame = false
         timer?.cancel()
-        val newScore = GallowsPreferences.addScore(context, -penalty)
+        val newScore = Preferences.addScore(context, -penalty)
         listener.onGameLose(word, wrongLetters, lostByTime, newScore)
     }
     // endregion

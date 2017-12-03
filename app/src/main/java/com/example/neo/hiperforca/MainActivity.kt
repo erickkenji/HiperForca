@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
@@ -14,8 +13,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.RelativeLayout
+import com.example.neo.hiperforca.core.Preferences
 import com.example.neo.hiperforca.core.GlobalConstants
 import tutorial.TutorialActivity
 
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         gallowsRecognizer = GallowsRecognizer(this, this)
         gallowsController = GallowsController(this, this)
         activity_main_gallows_word?.letterSpacing = 0.3f
-        activity_main_gallows_score?.text = resources.getString(R.string.score).format(GallowsPreferences.getScore(this))
+        activity_main_gallows_score?.text = resources.getString(R.string.score).format(Preferences.getScore(this))
         activityContainer = activity_main_container
 
         // hide the action bar
@@ -42,9 +41,9 @@ class MainActivity : AppCompatActivity(), GallowsRecognizer.Listener, GallowsCon
         setSupportActionBar(activity_main_toolbar)
         activity_main_speak_button?.setOnClickListener { gallowsRecognizer?.listen() }
 
-        if (GallowsPreferences.isFirstAccess(this)) {
+        if (Preferences.isFirstAccess(this)) {
             startTutorialActivity()
-            GallowsPreferences.saveUserFirstAccess(this)
+            Preferences.saveUserFirstAccess(this)
         }
     }
 

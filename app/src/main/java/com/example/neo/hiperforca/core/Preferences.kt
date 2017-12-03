@@ -1,4 +1,4 @@
-package com.example.neo.hiperforca
+package com.example.neo.hiperforca.core
 
 import android.content.Context
 
@@ -6,7 +6,7 @@ import android.content.Context
 /**
  * Created by isabella on 26/11/17.
  */
-object GallowsPreferences {
+object Preferences {
     private val GALLOWS_PREFERENCES = "com.example.HiperForca.GALLOWS_PREFERENCES"
     private val SCORE_KEY = "SCORE_KEY"
     private val FIRST_ACCESS_KEY = "FIRST_ACCESS_KEY"
