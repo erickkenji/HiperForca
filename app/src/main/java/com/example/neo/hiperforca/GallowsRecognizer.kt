@@ -2,16 +2,18 @@ package com.example.neo.hiperforca
 
 import android.content.Context
 import com.example.neo.hiperforca.core.SpeechRecognizerService
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by isabella on 17/11/17.
  */
 class GallowsRecognizer(private val context: Context, private val listener: GallowsRecognizer.Listener) : SpeechRecognizerService.Listener {
-    var shouldRecognizeLetters: Boolean = false
+    var shouldRecognizeLettersOrWord: Boolean = false
     private var speechRecognizerService: SpeechRecognizerService? = null
 
     interface Listener {
         fun onLetterRecognized(letter: Char)
+        fun onWordRecognized(word: String)
         fun onBeginRecognized()
         fun onError(text: String)
         fun onPermissionNeeded()
@@ -25,8 +27,8 @@ class GallowsRecognizer(private val context: Context, private val listener: Gall
     }
 
     override fun onSpeechRecognized(text: String) {
-        if (shouldRecognizeLetters) {
-            recognizeLetters(text)
+        if (shouldRecognizeLettersOrWord) {
+            recognizeLettersOrWord(text)
         } else {
             recognizeBeginningOfGame(text)
         }
@@ -61,14 +63,22 @@ class GallowsRecognizer(private val context: Context, private val listener: Gall
         speechRecognizerService = null
     }
 
-    private fun recognizeLetters(text: String) {
-        val splittedText = text.split(" ")
+    private fun recognizeLettersOrWord(text: String) {
+        val splittedText = text.split(" ", limit = 2)
         val firstWord = splittedText[0].toLowerCase()
-        if ((firstWord != "letra" && firstWord != "letter") || splittedText.size == 1) {
+        if ((firstWord != context.resources.getString(R.string.letter) && firstWord != context.resources.getString(R.string.word)) || splittedText.size == 1) {
             sendInvalidSpeechError()
             return
         }
 
+        if (firstWord == context.resources.getString(R.string.letter)) {
+            recognizeLetters(splittedText)
+        } else if (firstWord == context.resources.getString(R.string.word)) {
+            recognizeWord(splittedText)
+        }
+    }
+
+    private fun recognizeLetters(splittedText: List<String>) {
         val letter = splittedText[1].toLowerCase()
         if (context.resources.getStringArray(R.array.letters).contains(letter)) {
             listener.onLetterRecognized(letter[0])
@@ -77,14 +87,19 @@ class GallowsRecognizer(private val context: Context, private val listener: Gall
         }
     }
 
+    private fun recognizeWord(splittedText: List<String>) {
+        val word = StringUtils.stripAccents(splittedText[1].toLowerCase())
+        listener.onWordRecognized(word)
+    }
+
     private fun recognizeBeginningOfGame(text: String) {
         val splittedText = text.split(" ")
         val firstWord = splittedText[0].toLowerCase()
 
-        if (firstWord != "começar" && firstWord != "start") {
+        if (firstWord != context.resources.getString(R.string.start)) {
             sendInvalidSpeechError()
         } else {
-            shouldRecognizeLetters = true
+            shouldRecognizeLettersOrWord = true
             listener.onBeginRecognized()
         }
     }
